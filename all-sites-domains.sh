@@ -8,22 +8,24 @@ ORG_UUID="75553157-c4b5-444b-bd0b-036fb9ca6d98"
 
 # Stash list of all Pantheon sites in the org
 PANTHEON_SITES="$(terminus org:site:list -n ${ORG_UUID} --format=list --field=Name)"
-echo $PANTHEON_SITES
+# echo $PANTHEON_SITES
 
 # Function: Get each site environment's id and append to PANTHEON_SITE_NAME, e.g. dev, test, live, multidev
 get_site_environments() {
   # Get list of site environments
   site_name=$1
-  PANTHEON_SITE_ENVIRONMENTS="$(terminus env:list $site_name --field=id)"
-  echo $PANTHEON_SITE_ENVIRONMENTS
-  # Loop through each site env
-  # append to $site_name
-  # return $site_name
-  # output should be site.env
-  
-  #echo -e $PANTHEON_SITE_ENVIRONMENTS
-  return $1
 
+  #Get each site's environment
+  PANTHEON_SITE_ENVIRONMENTS="$(terminus env:list $site_name --field=id)"
+  
+  # Loop through each site env
+  # append to $site_name as site.env
+  # export each site.env to be used later to then get the domains of each env—could also test if there are any first. 
+  for ENV in "$PANTHEON_SITE_ENVIRONMENTS"
+  do 
+    echo "$site_name.$ENV"
+    return 0
+  done
 }
 
 
@@ -39,11 +41,10 @@ while read -r PANTHEON_SITE_NAME; do
         echo -e "Skipping '$PANTHEON_SITE_NAME' because it is frozen.\n"
     else
         # Otherwise add the site to the list
-        echo -e "Adding '$PANTHEON_SITE_NAME' to the list."
-        
-        # Needs work here. Getting error when calling this function  
+        # echo -e "Adding '$PANTHEON_SITE_NAME' to the list."
+    
         get_site_environments $PANTHEON_SITE_NAME
-      
+        #echo $site_name
     fi
 done <<< "$PANTHEON_SITES"
 
