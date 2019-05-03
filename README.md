@@ -1,2 +1,2 @@
 # all-sites-domains
-Get all domains for all sites for all environments
+Given an Org ID, get all custom domains for each site for each environment
