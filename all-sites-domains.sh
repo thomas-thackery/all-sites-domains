@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Exit on error
-set -e
+# set -e
 
 # Stash org UUID
 ORG_UUID="75553157-c4b5-444b-bd0b-036fb9ca6d98"
@@ -16,18 +16,24 @@ get_site_environments() {
   site_name=$1
 
   #Get each site's environment
-  PANTHEON_SITE_ENVIRONMENTS="$(terminus env:list $site_name --field=id)"
+  PANTHEON_SITE_ENVIRONMENTS="$(terminus env:list $site_name --field=id --format=string)"
   
   # Loop through each site env
   # append to $site_name as site.env
   # export each site.env to be used later to get custom domains from each env—could also test if there are any first. 
-  for ENV in "$PANTHEON_SITE_ENVIRONMENTS"
+  for ENV in $PANTHEON_SITE_ENVIRONMENTS
   do
     #Issue: For each $ENV, create a $site_name.$ENV. This loop only does it on the first one. 
     # need to get to apply to all environments in $ENV
-    echo "$site_name.$ENV"
-    return 0
+    site_env="$site_name.$ENV"
+    filename=~/site_env.txt
+    if [ ! -f $filename ]
+    then
+      touch $filename
+    fi
+    echo $site_env >> ~/site_env.txt
   done
+  return 0
 }
 
 
@@ -40,7 +46,7 @@ while read -r PANTHEON_SITE_NAME; do
     if [[ "true" == "${IS_FROZEN}" ]]
     then
         # Then skip it
-        echo -e "Skipping '$PANTHEON_SITE_NAME' because it is frozen.\n"
+        echo "Skipping '$PANTHEON_SITE_NAME' because it is frozen.\n"
     else
         # Otherwise add the site to the list
         # echo -e "Adding '$PANTHEON_SITE_NAME' to the list."
