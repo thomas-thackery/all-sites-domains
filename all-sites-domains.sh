@@ -20,9 +20,11 @@ get_site_environments() {
   
   # Loop through each site env
   # append to $site_name as site.env
-  # export each site.env to be used later to then get the domains of each env—could also test if there are any first. 
+  # export each site.env to be used later to get custom domains from each env—could also test if there are any first. 
   for ENV in "$PANTHEON_SITE_ENVIRONMENTS"
-  do 
+  do
+    #Issue: For each $ENV, create a $site_name.$ENV. This loop only does it on the first one. 
+    # need to get to apply to all environments in $ENV
     echo "$site_name.$ENV"
     return 0
   done
