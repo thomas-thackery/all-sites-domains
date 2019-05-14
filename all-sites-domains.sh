@@ -56,5 +56,11 @@ while read -r PANTHEON_SITE_NAME; do
     fi
 done <<< "$PANTHEON_SITES"
 
-
-
+SITES_ENVS=~/site_env.txt
+while IFS= read -r SITE_ENV_DOMAINS
+do 
+  # Goal: Get list of custom domains
+  # To do: Exclude Pantheon platform domains
+  DOMAINS_LIST=$(terminus domain:list ${SITE_ENV_DOMAINS} --format=list)
+  echo $DOMAINS_LIST
+done <"$SITES_ENVS"
