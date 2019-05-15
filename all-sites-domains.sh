@@ -31,7 +31,7 @@ get_site_environments() {
     then
       touch $filename
     fi
-    echo $site_env >> ~/site_env.txt
+    echo $site_env >>  $filename
   done
   return 0
 }
