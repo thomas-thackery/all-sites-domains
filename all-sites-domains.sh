@@ -4,7 +4,7 @@
 # set -e
 
 # Stash org UUID
-ORG_UUID="75553157-c4b5-444b-bd0b-036fb9ca6d98"
+ORG_UUID=""
 
 # Stash list of all Pantheon sites in the org
 PANTHEON_SITES="$(terminus org:site:list -n ${ORG_UUID} --format=list --field=Name)"
